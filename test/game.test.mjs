@@ -11,7 +11,7 @@ test('fifteen selectable animals and six different vehicle bodies are available'
 });
 test('every vehicle has exactly the same acceleration, top speed, and handling',()=>{
   const outcomes=VEHICLES.map(vehicle=>{const {game,player}=racing();player.vehicle=vehicle.id;game.setInput('host',player.id,{throttle:1,steer:.1});for(let i=0;i<30;i++)game.step(1/60,player.lastInput+i*1000/60);return[player.x,player.z,player.angle,player.speed];});
-  for(const outcome of outcomes)assert.deepEqual(outcome,outcomes[0]);assert.equal(KART_STATS.topSpeed,26);assert.ok(Object.isFrozen(KART_STATS));
+  for(const outcome of outcomes)assert.deepEqual(outcome,outcomes[0]);assert.equal(KART_STATS.topSpeed,20);assert.ok(Object.isFrozen(KART_STATS));
 });
 test('eight distinct smooth circuits support consistent sampling and projection',()=>{
   assert.equal(TRACKS.length,8);

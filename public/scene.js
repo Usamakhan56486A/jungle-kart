@@ -108,6 +108,7 @@ export class RacingScene {
     this._geometries = new Set(); this._materials = new Set(); this._textures = new Set();
     this._sharedMaterials = new Set(); this._sharedGeometries = new Set(); this._textureCache = new Map();
     this._models = new Map(); this._cameraStates = []; this._seenEvents = new Map(); this._bursts = [];
+    this._smooth = new Map();
     this._clock = 0; this._demoClock = 0; this._low = false; this._viewCount = 1;
     this._width = 0; this._height = 0; this._drawable = false; this._disposed = false; this._contextLost = false;
     this._dummy = new THREE.Object3D(); this._color = new THREE.Color();
@@ -1241,6 +1242,23 @@ export class RacingScene {
       // Only _demoPlayers' copies are customised. Never rewrite the authoritative roster or positions.
       if (ANIMALS.some(a => a.id === state.previewAnimal)) hero.animal = state.previewAnimal;
       if (VEHICLES.some(v => v.id === state.previewVehicle)) hero.vehicle = state.previewVehicle;
+    }
+    // Networked positions arrive at ~30 Hz; ease toward them so karts glide between
+    // updates instead of snapping. Teleports (reset, spirit swap) snap instead of sliding.
+    if (!lobby) {
+      const own = new Set(Array.isArray(viewPlayerIds) ? viewPlayerIds : []), keep = new Set();
+      for (const p of players) {
+        keep.add(p.id);
+        const tx = finite(p.x), ty = finite(p.y), tz = finite(p.z), ta = finite(p.angle);
+        let s = this._smooth.get(p.id);
+        if (!s || Math.hypot(tx - s.x, tz - s.z) > 6) s = { x: tx, y: ty, z: tz, angle: ta };
+        const rate = 1 - Math.exp(-dt * (own.has(p.id) ? 24 : 14));
+        s.x += (tx - s.x) * rate; s.y += (ty - s.y) * rate; s.z += (tz - s.z) * rate;
+        const da = Math.atan2(Math.sin(ta - s.angle), Math.cos(ta - s.angle)); s.angle += da * rate;
+        this._smooth.set(p.id, s);
+        p.x = s.x; p.y = s.y; p.z = s.z; p.angle = s.angle;
+      }
+      for (const id of [...this._smooth.keys()]) if (!keep.has(id)) this._smooth.delete(id);
     }
     this._syncRacers(players, dt, lobby);
     this._syncEffects(state, players, lobby, dt);

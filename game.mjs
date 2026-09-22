@@ -4,7 +4,7 @@ import {ANIMALS,VEHICLES,COLORS,MAX_PLAYERS,LAPS,RACE_LIMIT,CUP_POINTS,ITEMS,TRA
 // (the static Cloudflare Pages build imports it directly, with no server).
 const randomUUID=()=>globalThis.crypto?.randomUUID?globalThis.crypto.randomUUID():`id-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
 
-export const KART_STATS=Object.freeze({topSpeed:26,boostSpeed:37,reverseSpeed:8,acceleration:18,braking:32,steering:1.48,radius:1.05});
+export const KART_STATS=Object.freeze({topSpeed:20,boostSpeed:29,reverseSpeed:6,acceleration:12,braking:26,steering:1.62,radius:1.05});
 const TRACK_COUNT=TRACKS.length;
 const angular=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
 const moveToward=(a,b,amount)=>a<b?Math.min(a+amount,b):Math.max(a-amount,b);

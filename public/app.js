@@ -9,7 +9,8 @@ let state={phase:'lobby',trackId:0,elapsed:0,countdown:0,roundIndex:0,totalRound
 let prefs={animal:'tiger',vehicle:'kart',name:''};
 try{const stored=JSON.parse(localStorage.getItem('jungle-garage')||'{}');if(ANIMALS.some(a=>a.id===stored.animal))prefs.animal=stored.animal;if(VEHICLES.some(v=>v.id===stored.vehicle))prefs.vehicle=stored.vehicle;if(typeof stored.name==='string')prefs.name=stored.name.slice(0,18);}catch{}
 let previousPhase='lobby',rosterKey='',hudKey='',viewIds=[],hudViews=[],mapTrack=createTrack(0),mapTrackId=0,lastEvent=0,lastCountdown=4,notificationTimer,alertTimer;
-let lowQuality=touchDevice,sound=false,audio,engine,engineGain,disposedForController=false;
+let lowQuality=touchDevice,sound=true,audio,engine,engineGain,disposedForController=false;
+try{sound=localStorage.getItem('jungle-kart-sound')!=='0';}catch{}
 const podiums=new Map(['results','leaderboard'].map(id=>[id,{scene:null,entries:[],failed:false}]));
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 let leaderboardRequest=0;
@@ -160,7 +161,11 @@ $('leaderboard-button').onclick=async()=>{
 };
 $('fullscreen-button').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{notify('Fullscreen is unavailable here. Open the game in Chrome or Edge.');}};
 $('quality-button').onclick=()=>{lowQuality=!lowQuality;scene?.setQuality(lowQuality);for(const podium of podiums.values())podium.scene?.setQuality(lowQuality);$('quality-button').textContent=`${lowQuality?'LOW':'HIGH'} GRAPHICS`;};
-$('sound-button').onclick=()=>{sound=!sound;$('sound-button').classList.toggle('active',sound);$('sound-button').setAttribute('aria-label',sound?'Mute sound':'Enable sound');if(sound){initAudio();audio?.resume().catch(()=>{});tone(440,.12);}else engineGain?.gain.setTargetAtTime(0,audio.currentTime,.08);notify(sound?'Sound on.':'Sound muted.');};
+$('sound-button').onclick=()=>{sound=!sound;try{localStorage.setItem('jungle-kart-sound',sound?'1':'0');}catch{}$('sound-button').classList.toggle('active',sound);$('sound-button').setAttribute('aria-label',sound?'Mute sound':'Enable sound');if(sound){initAudio();audio?.resume().catch(()=>{});tone(440,.12);}else engineGain?.gain.setTargetAtTime(0,audio.currentTime,.08);notify(sound?'Sound on.':'Sound muted.');};
+// Browsers keep an AudioContext silent until a user gesture; unlock it on the first one
+// so engine hum and power-up sounds play without hunting for the speaker button.
+const unlockAudio=()=>{if(!sound)return;initAudio();audio?.resume().catch(()=>{});};
+for(const type of ['pointerdown','keydown','touchend'])window.addEventListener(type,unlockAudio,{once:true});
 function initAudio(){
   if(audio)return;try{audio=new(window.AudioContext||window.webkitAudioContext)();engine=audio.createOscillator();engine.type='triangle';engineGain=audio.createGain();engineGain.gain.value=0;engine.connect(engineGain);engineGain.connect(audio.destination);engine.start();}catch{sound=false;}
 }
@@ -365,8 +370,8 @@ function frame(now){const dt=Math.min((now-lastFrame)/1000,.1);lastFrame=now;
   const showingPodium=$('results-dialog').open||$('leaderboard-dialog').open;
   if(!document.hidden&&scene&&!showingPodium){const viewState=state.phase==='lobby'?{...state,previewTrack,previewAnimal:prefs.animal,previewVehicle:prefs.vehicle,previewPlayerId:activePlayerId}:state;scene.update(viewState,dt,viewIds);}
   if(!document.hidden)updatePodiums(dt);
-  if(sound&&audio&&engineGain){const p=ownPlayers()[0],volume=state.phase==='racing'&&p&&!document.hidden ? .007 : 0;engineGain.gain.setTargetAtTime(volume,audio.currentTime,.1);engine.frequency.setTargetAtTime(45+Math.abs(p?.speed||0)*4.7,audio.currentTime,.1);}
+  if(sound&&audio&&engineGain){const p=ownPlayers()[0],volume=state.phase==='racing'&&p&&!document.hidden ? .011 : 0;engineGain.gain.setTargetAtTime(volume,audio.currentTime,.1);engine.frequency.setTargetAtTime(45+Math.abs(p?.speed||0)*4.7,audio.currentTime,.1);}
   requestAnimationFrame(frame);
 }
-setGarage();updateTrackCard();$('quality-button').textContent=`${lowQuality?'LOW':'HIGH'} GRAPHICS`;initScene();connect();renderUI();requestAnimationFrame(frame);
-Object.defineProperty(window,'jungleKart',{value:{get state(){return state;},get scene(){return scene;},get podiums(){return Object.fromEntries([...podiums].map(([id,podium])=>[id,podium.scene]));},get clientId(){return clientId;},get views(){return [...viewIds];},get controllerOnly(){return controllerOnly();},get touchDevice(){return touchDevice;}},writable:false});
+setGarage();updateTrackCard();$('sound-button').classList.toggle('active',sound);$('sound-button').setAttribute('aria-label',sound?'Mute sound':'Enable sound');$('quality-button').textContent=`${lowQuality?'LOW':'HIGH'} GRAPHICS`;initScene();connect();renderUI();requestAnimationFrame(frame);
+Object.defineProperty(window,'jungleKart',{value:{get state(){return state;},get scene(){return scene;},get podiums(){return Object.fromEntries([...podiums].map(([id,podium])=>[id,podium.scene]));},get clientId(){return clientId;},get views(){return [...viewIds];},get controllerOnly(){return controllerOnly();},get touchDevice(){return touchDevice;},get audio(){return{sound,state:audio?.state||'none'};}},writable:false});
