@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: jungle-kart
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install --omit=dev --no-audit --no-fund
+    startCommand: node server.mjs
+    healthCheckPath: /api/info
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.1
+      - key: LEADERBOARD_FILE
+        value: /opt/render/project/src/data/leaderboard.json

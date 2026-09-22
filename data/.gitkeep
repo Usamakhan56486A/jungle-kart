@@ -1,0 +1,2 @@
+# This file keeps the leaderboard directory in git so a fresh clone (e.g. on Render)
+# has a writable place for data/leaderboard.json. Scores themselves are gitignored.

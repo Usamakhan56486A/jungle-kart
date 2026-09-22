@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#163e31">
+  <meta name="description" content="Take the wild route. An original jungle racing game for up to six friends: split-screen, local network, or a three-race Grand Prix.">
+  <title>Jungle Kart — Wild Circuit</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23163e31'/%3E%3Cpath d='M17 43V20h8v16q0 9-8 9m15-25v25m0-11 13-14m-13 14 14 11' fill='none' stroke='%23c7da85' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script type="importmap">{"imports":{"three":"/vendor/three.module.js"}}</script>
+</head>
+<body>
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="icon-mark" viewBox="0 0 48 48">
+        <path d="M24 5C13 5 5 13 5 24s8 19 19 19 19-8 19-19S35 5 24 5Z" fill="none" stroke="currentColor" stroke-width="3"/>
+        <path d="M8 21h32M20 27l-5 12m13-12 5 12" fill="none" stroke="currentColor" stroke-width="4"/>
+        <path d="M24 24c-7-10 1-15 10-15-1 8-4 15-10 15Z" fill="currentColor"/>
+        <circle cx="24" cy="25" r="5" fill="currentColor"/>
+      </symbol>
+      <symbol id="icon-flag" viewBox="0 0 24 24">
+        <path d="M5 21V3m0 1c5-4 9 4 15 0v11c-6 4-10-4-15 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="m6 4 4 1v4L6 8Zm4 5 5 2v4l-5-2Zm5-3 4-1v4l-4 2Z" fill="currentColor"/>
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-sound" viewBox="0 0 24 24"><path d="m11 4-6 5H2v6h3l6 5Zm4 4a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></symbol>
+      <symbol id="icon-fullscreen" viewBox="0 0 24 24"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-leaf" viewBox="0 0 24 24"><path d="M5 19C-1 7 12 3 21 3c0 12-5 19-16 16Zm-2 3L15 10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-cup" viewBox="0 0 24 24"><path d="M7 3h10v6a5 5 0 0 1-10 0Zm0 2H3v3a4 4 0 0 0 5 4m9-7h4v3a4 4 0 0 1-5 4m-4 2v6m-5 1h10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-people" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M2 21v-3a7 7 0 0 1 14 0v3M16 4a3 3 0 0 1 0 6m3 4a6 6 0 0 1 3 5v2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="icon-bot" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v4M1 12v5m22-5v5M9 17h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="9" cy="12" r="1.3" fill="currentColor"/><circle cx="15" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="2" r="1.5" fill="currentColor"/></symbol>
+      <symbol id="icon-network" viewBox="0 0 24 24"><path d="M3 9a14 14 0 0 1 18 0M6 13a9 9 0 0 1 12 0m-9 4a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="21" r="1.5" fill="currentColor"/></symbol>
+      <symbol id="icon-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M15 5V3H3v13h2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="icon-drift" viewBox="0 0 24 24"><path d="m10 4 9 3-2 7-9-3Zm2 9c-7 2 5 5-3 8M5 11c-7 3 5 6-2 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-item" viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 10-13h-7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+      <symbol id="icon-brake" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 6a11 11 0 0 0 0 12M21 6a11 11 0 0 1 0 12M10 9v6m4-6v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="icon-gamepad" viewBox="0 0 24 24"><path d="M7 6h10c3 0 6 11 4 13s-5-3-6-3H9c-1 0-4 5-6 3S4 6 7 6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M5 11h6M8 8v6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="16" cy="10" r="1" fill="currentColor"/><circle cx="19" cy="13" r="1" fill="currentColor"/></symbol>
+
+      <!-- Original driver portraits. Shared 80 × 80 view box for app-built tiles. -->
+      <symbol id="avatar-tiger" viewBox="0 0 80 80">
+        <g stroke="#382d26" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="17" cy="20" r="12" fill="#e9a34b"/><circle cx="63" cy="20" r="12" fill="#e9a34b"/><circle cx="17" cy="20" r="6" fill="#6a4630"/><circle cx="63" cy="20" r="6" fill="#6a4630"/>
+          <path d="M12 37C12 18 25 12 40 12s28 6 28 25v12c0 16-13 24-28 24S12 65 12 49Z" fill="#e9a34b"/>
+          <path d="m33 14 7 14 7-14M13 35l12 5-12 3m1 7 12 3-10 5m51-23-12 5 12 3m-1 7-12 3 10 5" fill="#382d26" stroke="none"/>
+          <path d="M40 47c-15-9-25 4-18 15 6 9 29 9 36 0 7-11-3-24-18-15Z" fill="#fff0d1" stroke="none"/>
+          <ellipse cx="28" cy="39" rx="3.5" ry="5" fill="#382d26" stroke="none"/><ellipse cx="52" cy="39" rx="3.5" ry="5" fill="#382d26" stroke="none"/>
+          <path d="m34 49 6 6 6-6Z" fill="#382d26"/><path d="M40 55v5m-7 0q7 7 14 0" fill="none"/>
+        </g><g fill="#fff"><circle cx="29" cy="37" r="1.2"/><circle cx="53" cy="37" r="1.2"/></g>
+      </symbol>
+      <symbol id="avatar-panda" viewBox="0 0 80 80">
+        <g stroke="#333c36" stroke-width="2.5" stroke-linejoin="round">
+          <circle cx="17" cy="20" r="13" fill="#333c36"/><circle cx="63" cy="20" r="13" fill="#333c36"/>
+          <path d="M10 43c0-19 12-30 30-30s30 11 30 30c0 21-13 30-30 30S10 64 10 43Z" fill="#f0eee0"/>
+          <ellipse cx="26" cy="40" rx="10" ry="13" transform="rotate(25 26 40)" fill="#333c36" stroke="none"/><ellipse cx="54" cy="40" rx="10" ry="13" transform="rotate(-25 54 40)" fill="#333c36" stroke="none"/>
+          <path d="m35 53 5 4 5-4Z" fill="#333c36"/><path d="M40 57v4m-6 0q6 7 12 0" fill="none" stroke-linecap="round"/>
+        </g><g fill="#f0eee0"><ellipse cx="28" cy="39" rx="3" ry="4"/><ellipse cx="52" cy="39" rx="3" ry="4"/></g><g fill="#333c36"><circle cx="29" cy="40" r="1.6"/><circle cx="51" cy="40" r="1.6"/></g><g fill="#dcada0"><ellipse cx="20" cy="55" rx="5" ry="2.5"/><ellipse cx="60" cy="55" rx="5" ry="2.5"/></g>
+      </symbol>
+      <symbol id="avatar-fox" viewBox="0 0 80 80">
+        <g stroke="#633e2d" stroke-width="2.5" stroke-linejoin="round">
+          <path d="M12 36 8 5l25 17h14L72 5l-4 31 5 12-22 22H29L7 48Z" fill="#d77942"/>
+          <path d="m16 15 4 19 10-9Zm48 0-14 10 10 9Z" fill="#633e2d" stroke="none"/>
+          <path d="M10 44c17-3 22 7 30 11 8-4 13-14 30-11L53 64l-13 8-13-8Z" fill="#fff0d1" stroke="none"/>
+          <path d="m34 54 6 6 6-6Z" fill="#382d26"/><path d="M40 60v4m-5 0q5 4 10 0" fill="none" stroke-linecap="round"/>
+        </g><g fill="#382d26"><ellipse cx="27" cy="40" rx="3" ry="4.5"/><ellipse cx="53" cy="40" rx="3" ry="4.5"/></g><g fill="#fff"><circle cx="28" cy="38" r="1"/><circle cx="54" cy="38" r="1"/></g>
+      </symbol>
+      <symbol id="avatar-capybara" viewBox="0 0 80 80">
+        <g stroke="#614c39" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="20" cy="19" rx="9" ry="10" fill="#a58b65"/><ellipse cx="60" cy="19" rx="9" ry="10" fill="#a58b65"/><path d="M17 20h5m36 0h5" stroke="#d3bb8f" stroke-width="4"/>
+          <path d="M15 35c0-14 13-19 25-19s25 5 25 19l4 20c2 13-10 18-29 18s-31-5-29-18Z" fill="#a58b65"/>
+          <rect x="20" y="43" width="40" height="22" rx="10" fill="#d3bb8f" stroke="none"/>
+          <path d="M20 37h8m24 0h8M35 51h10m-5 1v9m-7 0h14" fill="none"/>
+          <path d="M37 61v6h6v-6" fill="#f5f1df"/>
+        </g><path d="m34 16 4-6 5 6" fill="#a58b65" stroke="#614c39" stroke-width="2" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="avatar-monkey" viewBox="0 0 80 80">
+        <g stroke="#513e30" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="41" r="11" fill="#8c654a"/><circle cx="68" cy="41" r="11" fill="#8c654a"/><circle cx="12" cy="41" r="6" fill="#ddbc8c" stroke="none"/><circle cx="68" cy="41" r="6" fill="#ddbc8c" stroke="none"/>
+          <path d="M14 38c0-17 10-26 24-27l6-8 1 9c17 1 22 14 22 29 0 21-12 32-27 32S14 62 14 38Z" fill="#8c654a"/>
+          <path d="M40 31c-16-22-35 7-18 19-10 15 0 20 18 20s28-5 18-20c17-12-2-41-18-19Z" fill="#ddbc8c" stroke="none"/>
+          <path d="M27 55q13 14 26 0m-17-7h8" fill="none"/>
+        </g><g fill="#382d26"><ellipse cx="28" cy="38" rx="3" ry="4.5"/><ellipse cx="52" cy="38" rx="3" ry="4.5"/></g><g fill="#fff"><circle cx="29" cy="36" r="1"/><circle cx="53" cy="36" r="1"/></g>
+      </symbol>
+      <symbol id="avatar-rabbit" viewBox="0 0 80 80">
+        <g stroke="#74685e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="25" cy="21" rx="10" ry="21" transform="rotate(-12 25 21)" fill="#e4ddd1"/><ellipse cx="55" cy="21" rx="10" ry="21" transform="rotate(12 55 21)" fill="#e4ddd1"/>
+          <path d="m22 9 5 24m31-24-5 24" stroke="#ddb8b0" stroke-width="7"/>
+          <path d="M13 49c0-15 12-23 27-23s27 8 27 23c0 17-12 25-27 25S13 66 13 49Z" fill="#e4ddd1"/>
+          <ellipse cx="40" cy="58" rx="17" ry="11" fill="#f7f2e9" stroke="none"/><path d="m36 52 4 4 4-4" fill="#ddb8b0" stroke="#b68983"/>
+          <path d="M40 56v6m-7-3q7 7 14 0" fill="none"/><path d="M36 63v7h8v-7m-4 0v7" fill="#fff" stroke-width="1.5"/>
+        </g><g fill="#393c35"><ellipse cx="28" cy="44" rx="3" ry="4.5"/><ellipse cx="52" cy="44" rx="3" ry="4.5"/></g><g fill="#ddb8b0"><ellipse cx="20" cy="54" rx="5" ry="3"/><ellipse cx="60" cy="54" rx="5" ry="3"/></g>
+      </symbol>
+      <symbol id="avatar-frog" viewBox="0 0 80 80">
+        <g stroke="#47633c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 37C0 14 28 5 35 24h10C52 5 80 14 70 37c15 24-3 36-30 36S-5 61 10 37Z" fill="#8cad56"/>
+          <ellipse cx="22" cy="28" rx="10" ry="11" fill="#f6f2ce" stroke="none"/><ellipse cx="58" cy="28" rx="10" ry="11" fill="#f6f2ce" stroke="none"/>
+          <ellipse cx="40" cy="55" rx="28" ry="13" fill="#e4e4a7" stroke="none"/>
+          <path d="M19 49q21 20 42 0" fill="none"/><path d="M34 43h1m10 0h1" stroke-width="3"/>
+        </g><g fill="#253c31"><ellipse cx="24" cy="29" rx="4.5" ry="6"/><ellipse cx="56" cy="29" rx="4.5" ry="6"/></g><g fill="#fff"><circle cx="25" cy="27" r="1.7"/><circle cx="57" cy="27" r="1.7"/></g><g fill="#c6a575"><ellipse cx="13" cy="45" rx="5" ry="3"/><ellipse cx="67" cy="45" rx="5" ry="3"/></g>
+      </symbol>
+      <symbol id="avatar-redpanda" viewBox="0 0 80 80">
+        <g stroke="#673d2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 31 6 8l24 10h20L74 8l-4 23 6 17-8 4 1 7-14 10H25L11 59l1-7-8-4Z" fill="#bd603b"/>
+          <path d="m12 15 5 17 9-10Zm56 0-14 7 9 10Z" fill="#ede0c5" stroke="none"/>
+          <path d="M10 45c7-6 13-4 18 1l12 8 12-8c5-5 11-7 18-1l-4 13-16 13H30L14 58Z" fill="#ede0c5" stroke="none"/>
+          <path d="m22 40 7 1-3 11-7-5Zm36 0-7 1 3 11 7-5Z" fill="#673d2e" stroke="none"/>
+          <path d="m35 52 5 5 5-5Z" fill="#333c36" stroke="#333c36"/><path d="M40 57v5m-6-1q6 6 12 0" fill="none"/>
+          <path d="m21 32 8-2m22 0 8 2" stroke="#ede0c5" stroke-width="5"/>
+        </g><g fill="#333c36"><ellipse cx="27" cy="40" rx="3" ry="4"/><ellipse cx="53" cy="40" rx="3" ry="4"/></g><g fill="#fff"><circle cx="28" cy="39" r="1"/><circle cx="54" cy="39" r="1"/></g>
+      </symbol>
+      <symbol id="avatar-bear" viewBox="0 0 80 80">
+        <g stroke="#4b3d30" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="17" cy="20" r="12" fill="#856349"/><circle cx="63" cy="20" r="12" fill="#856349"/><circle cx="17" cy="20" r="6" fill="#c4a982" stroke="none"/><circle cx="63" cy="20" r="6" fill="#c4a982" stroke="none"/>
+          <path d="M10 44c0-21 13-31 30-31s30 10 30 31c0 20-13 29-30 29S10 64 10 44Z" fill="#856349"/>
+          <ellipse cx="40" cy="55" rx="17" ry="14" fill="#c4a982" stroke="none"/>
+          <ellipse cx="40" cy="49" rx="7" ry="5" fill="#382d26" stroke="none"/><path d="M40 53v8m-7-2q7 7 14 0" fill="none"/>
+          <path d="m23 30 7-2m20 0 7 2" fill="none"/>
+        </g><g fill="#292e29"><ellipse cx="27" cy="38" rx="3" ry="4"/><ellipse cx="53" cy="38" rx="3" ry="4"/></g><g fill="#fff"><circle cx="28" cy="37" r="1"/><circle cx="54" cy="37" r="1"/></g>
+      </symbol>
+      <symbol id="avatar-crocodile" viewBox="0 0 80 80">
+        <g stroke="#3c5b42" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m30 24 4-13 6 8 6-8 4 13" fill="#729168"/>
+          <path d="M17 42V28c0-15 19-15 23-3 4-12 23-12 23 3v14c20 22 5 31-23 31S-3 64 17 42Z" fill="#729168"/>
+          <ellipse cx="27" cy="30" rx="7" ry="9" fill="#eae5bb" stroke="none"/><ellipse cx="53" cy="30" rx="7" ry="9" fill="#eae5bb" stroke="none"/>
+          <path d="M12 52c8-8 48-8 56 0v6c0 10-14 14-28 14s-28-4-28-14Z" fill="#d0ce98" stroke="none"/>
+          <path d="M14 55q26 13 52 0m-43 4 3 7 4-5m20 0 4 5 3-7" fill="#fff8dc"/>
+          <path d="M29 48h1m20 0h1" stroke-width="4"/>
+        </g><g fill="#253c31"><ellipse cx="28" cy="31" rx="2.8" ry="5"/><ellipse cx="52" cy="31" rx="2.8" ry="5"/></g>
+      </symbol>
+      <symbol id="avatar-koala" viewBox="0 0 80 80">
+        <g stroke="#5d6961" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="15" cy="32" r="15" fill="#a4aba3"/><circle cx="65" cy="32" r="15" fill="#a4aba3"/><circle cx="15" cy="32" r="9" fill="#ebe5d3" stroke="none"/><circle cx="65" cy="32" r="9" fill="#ebe5d3" stroke="none"/>
+          <path d="M17 38c0-17 10-24 23-24s23 7 23 24v14c0 15-10 21-23 21s-23-6-23-21Z" fill="#a4aba3"/>
+          <path d="m33 16 5-8 5 7 6-3" fill="#a4aba3"/>
+          <ellipse cx="40" cy="59" rx="13" ry="10" fill="#ebe5d3" stroke="none"/>
+          <path d="M33 46c0-12 14-12 14 0v6c0 8-14 8-14 0Z" fill="#38443c" stroke="none"/><path d="M35 62q5 5 10 0" fill="none"/>
+        </g><g fill="#303c33"><ellipse cx="26" cy="42" rx="3" ry="4"/><ellipse cx="54" cy="42" rx="3" ry="4"/></g><g fill="#d5b5a8"><ellipse cx="24" cy="52" rx="4" ry="2.5"/><ellipse cx="56" cy="52" rx="4" ry="2.5"/></g>
+      </symbol>
+      <symbol id="avatar-otter" viewBox="0 0 80 80">
+        <g stroke="#5d4736" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="14" cy="31" r="9" fill="#94745a"/><circle cx="66" cy="31" r="9" fill="#94745a"/>
+          <path d="M11 43c0-18 13-28 29-28s29 10 29 28c0 20-11 30-29 30S11 63 11 43Z" fill="#94745a"/>
+          <path d="M15 48c6-11 17-7 25-1 8-6 19-10 25 1 8 16-10 22-25 22S7 64 15 48Z" fill="#e4cfad" stroke="none"/>
+          <path d="m35 47 5 5 5-5Z" fill="#3b332b"/><path d="M40 52v6m-9-2q9 10 18 0M24 53 7 50m17 8L7 60m49-7 17-3m-17 8 17 2" fill="none" stroke-width="1.7"/>
+        </g><g fill="#332e27"><ellipse cx="27" cy="38" rx="3" ry="4"/><ellipse cx="53" cy="38" rx="3" ry="4"/></g><g fill="#fff"><circle cx="28" cy="37" r="1"/><circle cx="54" cy="37" r="1"/></g>
+      </symbol>
+      <symbol id="avatar-leopard" viewBox="0 0 80 80">
+        <g stroke="#46392d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="17" cy="20" r="11" fill="#d3ad60"/><circle cx="63" cy="20" r="11" fill="#d3ad60"/><circle cx="17" cy="20" r="5" fill="#46392d" stroke="none"/><circle cx="63" cy="20" r="5" fill="#46392d" stroke="none"/>
+          <path d="M12 39c0-17 12-26 28-26s28 9 28 26v11c0 16-13 23-28 23S12 66 12 50Z" fill="#d3ad60"/>
+          <path d="M40 46c-17-9-29 10-16 19 8 5 24 5 32 0 13-9 1-28-16-19Z" fill="#f4e3b8" stroke="none"/>
+          <path d="m35 49 5 5 5-5Z" fill="#46392d"/><path d="M40 54v6m-6-1q6 7 12 0" fill="none"/>
+          <path d="m21 25 3-4 4 3-3 4Zm31-1 4-3 3 4-4 3ZM36 20l4-2 4 2-4 4ZM16 43l4-2 2 4-4 3Zm42 2 2-4 4 2-2 5M18 56l3 2m38 0 3-2" fill="none"/>
+        </g><g fill="#46392d"><ellipse cx="28" cy="37" rx="3" ry="4"/><ellipse cx="52" cy="37" rx="3" ry="4"/><circle cx="28" cy="56" r="1.3"/><circle cx="52" cy="56" r="1.3"/></g><g fill="#fff"><circle cx="29" cy="36" r="1"/><circle cx="53" cy="36" r="1"/></g>
+      </symbol>
+      <symbol id="avatar-elephant" viewBox="0 0 80 80">
+        <g stroke="#5f6b64" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M26 23C3 3-4 32 5 52c6 14 17 14 23 3m26-32C77 3 84 32 75 52c-6 14-17 14-23 3" fill="#9fa5a1"/>
+          <path d="M22 29C7 17 6 37 12 49c4 7 9 8 12 4m34-24c15-12 16 8 10 20-4 7-9 8-12 4" fill="#d4bfb4" stroke="none"/>
+          <path d="M18 37c0-18 9-25 22-25s22 7 22 25v11c0 13-10 20-22 20S18 61 18 48Z" fill="#9fa5a1"/>
+          <path d="m27 51-3 13q9 1 10-9m19-4 3 13q-9 1-10-9" fill="#fff0d1"/>
+          <path d="M33 44v20c0 15 23 16 22 3l-8-2c1 5-4 6-5 1V44" fill="#9fa5a1"/>
+          <path d="M34 53h7m-7 6h7" fill="none" stroke-width="1.5"/>
+        </g><g fill="#303c33"><ellipse cx="27" cy="40" rx="3" ry="4"/><ellipse cx="53" cy="40" rx="3" ry="4"/></g><g fill="#fff"><circle cx="28" cy="39" r="1"/><circle cx="54" cy="39" r="1"/></g>
+      </symbol>
+      <symbol id="avatar-raccoon" viewBox="0 0 80 80">
+        <g stroke="#343a36" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 32 10 7l22 15h16L70 7l-3 25 7 18-14 16-20 7-20-7L6 50Z" fill="#a4a097"/>
+          <path d="m16 16 5 17 9-8Zm48 0-14 9 9 8Z" fill="#343a36" stroke="none"/>
+          <path d="M11 36c8-7 19-6 29 1 10-7 21-8 29-1l-2 16c-9 5-18 1-27-4-9 5-18 9-27 4Z" fill="#343a36" stroke="none"/>
+          <path d="m36 23 4 16 4-16M17 56l16-9h14l16 9-23 14Z" fill="#ece6d7" stroke="none"/>
+          <path d="m34 51 6 5 6-5Z" fill="#343a36"/><path d="M40 56v6m-6-1q6 6 12 0" fill="none"/>
+        </g><g fill="#f5f1df"><ellipse cx="26" cy="41" rx="4" ry="4.5"/><ellipse cx="54" cy="41" rx="4" ry="4.5"/></g><g fill="#343a36"><ellipse cx="27" cy="42" rx="2" ry="3"/><ellipse cx="53" cy="42" rx="2" ry="3"/></g>
+      </symbol>
+
+      <!-- Original vehicle illustrations; silhouettes match the six garage choices. -->
+      <symbol id="vehicle-kart" viewBox="0 0 120 80">
+        <g stroke="#253c31" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 51h82l9 10H11Z" fill="#cf6942"/><path d="M32 47V35h19l9 12h33l5 11H24Z" fill="#ed8b57"/>
+          <path d="M54 45 51 29h-9v16" fill="#3b5648"/><path d="m66 42 6-12m-5-3 12 5" fill="none"/>
+          <path d="M77 43h23l8 9H77Z" fill="#f9d5a3"/>
+          <rect x="14" y="44" width="16" height="26" rx="6" fill="#253c31"/><rect x="87" y="47" width="17" height="25" rx="6" fill="#253c31"/>
+          <path d="M20 50v14m73-10v12" stroke="#849384"/>
+          <path d="M6 39h26v6H6Z" fill="#ed8b57"/><path d="M19 45v6"/>
+        </g><path d="M39 49h11" stroke="#f5f1df" stroke-width="4"/><circle cx="67" cy="54" r="5" fill="#f5f1df"/>
+      </symbol>
+      <symbol id="vehicle-jeep" viewBox="0 0 120 80">
+        <g stroke="#253c31" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 33h10V16h48l9 20h20l5 26H15Z" fill="#89a26a"/>
+          <path d="M31 21h18v18H31Zm24 0h14l8 18H55Z" fill="#c4e0d2"/>
+          <path d="M50 20v38m29-18v19M14 57h96M24 14h50" fill="none"/>
+          <rect x="7" y="33" width="11" height="23" rx="4" fill="#253c31"/>
+          <circle cx="33" cy="61" r="13" fill="#253c31"/><circle cx="89" cy="61" r="13" fill="#253c31"/><circle cx="33" cy="61" r="6" fill="#c7cbb4"/><circle cx="89" cy="61" r="6" fill="#c7cbb4"/>
+          <path d="M56 46h8"/><path d="M93 40h9v7h-9Z" fill="#f4e5a8"/>
+        </g><path d="m34 24 9 10m16-10 11 10" stroke="#f5f1df" stroke-width="2" opacity=".7"/>
+      </symbol>
+      <symbol id="vehicle-buggy" viewBox="0 0 120 80">
+        <g stroke="#253c31" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m24 47 7-29h29l24 30M31 18l17 30m12-30-4 30" fill="none" stroke-width="4"/>
+          <path d="M15 46h37l14-9 26 7 15 17H18Z" fill="#edbc63"/><path d="M40 46V31h10l7 15" fill="#5b6950"/>
+          <path d="M58 46 67 30m-5-3 12 6" fill="none"/><path d="m24 52 56 9 12-17M19 57h85" fill="none"/>
+          <circle cx="26" cy="61" r="15" fill="#253c31"/><circle cx="94" cy="61" r="15" fill="#253c31"/><circle cx="26" cy="61" r="7" fill="#e3c994"/><circle cx="94" cy="61" r="7" fill="#e3c994"/>
+          <path d="M10 31h20v7H10Z" fill="#edbc63"/>
+        </g><path d="m73 44 9 3" stroke="#fff3cf" stroke-width="4"/>
+      </symbol>
+      <symbol id="vehicle-coupe" viewBox="0 0 120 80">
+        <g stroke="#253c31" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m10 44 15-6 15-18h29l20 19 16 5 5 18H10Z" fill="#de796f"/>
+          <path d="m33 38 11-13h12v13Zm29-13h5l15 13H62Z" fill="#b8d6ca"/>
+          <path d="M59 40v17M14 55h91m-64-8h8" fill="none"/>
+          <circle cx="30" cy="61" r="12" fill="#253c31"/><circle cx="90" cy="61" r="12" fill="#253c31"/><circle cx="30" cy="61" r="5.5" fill="#eee0bd"/><circle cx="90" cy="61" r="5.5" fill="#eee0bd"/>
+          <path d="m97 44 8 2 1 6h-9Z" fill="#f9e7ae"/><path d="M10 46h8v6h-8" fill="#f6b280"/>
+        </g><path d="m70 43 8 1v10h-8Z" fill="#f5f1df"/><path d="m71 43 7 1" stroke="#de796f" stroke-width="2"/>
+      </symbol>
+      <symbol id="vehicle-hover" viewBox="0 0 120 80">
+        <ellipse cx="60" cy="70" rx="45" ry="5" fill="#75bfc0" opacity=".25"/>
+        <g stroke="#253c31" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M32 39c3-26 40-27 51 0" fill="#b7e0d9"/><path d="M53 20v17m-16-9 13 8" fill="none"/>
+          <path d="m12 43 15-9 59 2 23 12-9 11H24Z" fill="#75bfc0"/><path d="m13 44 38 9 57-6M51 53v8" fill="none"/>
+          <path d="m23 42-8-17 23 13m51 1 12-16-2 22" fill="#558f8f"/>
+          <ellipse cx="30" cy="56" rx="16" ry="8" fill="#253c31"/><ellipse cx="87" cy="57" rx="18" ry="8" fill="#253c31"/>
+          <path d="M21 57h18m37 1h23" stroke="#c7da85"/>
+        </g><path d="m63 44 16-1" stroke="#f5f1df" stroke-width="4" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="vehicle-tuktuk" viewBox="0 0 120 80">
+        <g stroke="#253c31" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 18h51l16 27h12l8 18H17Z" fill="#b6a0cb"/>
+          <path d="M25 24h24v22H25Zm31 0h9l12 21H56Z" fill="#c3dfd4"/>
+          <path d="M49 21v39m31-13v15M17 54h32m-21-6h12" fill="none"/>
+          <path d="M13 14h58v9H13Z" fill="#f2d893"/>
+          <path d="M17 29h8v21h-8" fill="#566c56"/>
+          <circle cx="31" cy="63" r="11" fill="#253c31"/><circle cx="91" cy="63" r="11" fill="#253c31"/><circle cx="31" cy="63" r="5" fill="#eee2c6"/><circle cx="91" cy="63" r="5" fill="#eee2c6"/>
+          <path d="M82 48h13v7H82Z" fill="#fae9b5"/>
+        </g><path d="M57 51h12" stroke="#f5f1df" stroke-width="4"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="site-header">
+    <div class="brand" aria-label="Jungle Kart, Wild Circuit">
+      <span class="brand-mark"><svg aria-hidden="true"><use href="#icon-mark"/></svg></span>
+      <span class="brand-wordmark">JUNGLE KART<small>WILD CIRCUIT</small></span>
+    </div>
+    <div class="header-edition"><span class="check-pattern" aria-hidden="true"></span><span>GOOD FRIENDS.<br>WILD COMPETITION.</span></div>
+    <div class="header-actions">
+      <span id="connection" class="connection" role="status">Connecting</span>
+      <button id="leaderboard-button" class="icon-button" type="button" title="Host leaderboard" aria-label="Open host leaderboard"><svg aria-hidden="true"><use href="#icon-cup"/></svg></button>
+      <span class="header-divider" aria-hidden="true"></span>
+      <button id="sound-button" class="icon-button" type="button" title="Toggle sound" aria-label="Toggle sound"><svg aria-hidden="true"><use href="#icon-sound"/></svg></button>
+      <button id="quality-button" class="icon-button quality-button" type="button" title="Change graphics quality" aria-label="Change graphics quality"><svg aria-hidden="true"><use href="#icon-leaf"/></svg><span>High</span></button>
+      <button id="help-button" class="icon-button" type="button" title="How to play" aria-label="Open how to play"><svg aria-hidden="true"><use href="#icon-help"/></svg></button>
+      <button id="fullscreen-button" class="icon-button" type="button" title="Toggle fullscreen" aria-label="Toggle fullscreen"><svg aria-hidden="true"><use href="#icon-fullscreen"/></svg></button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="arena" aria-label="Jungle Kart race arena">
+      <canvas id="game-canvas" aria-label="3D racing track. Race information is also shown in the on-screen race displays.">A WebGL-capable browser is needed to render the 3D track.</canvas>
+      <div id="loading" class="loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>Warming up the wild…</span></div>
+
+      <div id="lobby-overlay" class="lobby-overlay">
+        <div class="lobby-intro">
+          <div class="eyebrow lobby-eyebrow"><span class="eyebrow-line" aria-hidden="true"></span>GRAND PRIX <span class="eyebrow-separator">/</span> VOL. 01</div>
+          <h1>TAKE THE<br><span>WILD ROUTE.</span></h1>
+          <p class="lobby-tagline">A little friendly rivalry.<br>A whole lot of jungle.</p>
+          <span class="fair-play-pill"><svg aria-hidden="true"><use href="#icon-check"/></svg>Same stats. Pure skill.</span>
+        </div>
+        <div class="lobby-bottom">
+          <section class="track-card" aria-labelledby="track-name-lobby">
+            <div class="track-heading"><span class="track-number"><span id="track-counter">01 / 08</span> <span>TRACKS</span></span><span id="track-tag-lobby" class="eyebrow">THE GREEN HEART</span><svg class="track-leaf" aria-hidden="true"><use href="#icon-leaf"/></svg></div>
+            <div class="track-title-row"><h2 id="track-name-lobby">Canopy Cruise</h2><div class="track-navigation"><button id="track-prev" class="icon-button" type="button" aria-label="Previous track"><svg class="rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg></button><button id="track-next" class="icon-button" type="button" aria-label="Next track"><svg aria-hidden="true"><use href="#icon-chevron"/></svg></button></div></div>
+            <p id="track-description">Sweeping bends, towering palms, and a waterfall shortcut view.</p>
+          </section>
+          <div class="tour-info"><svg aria-hidden="true"><use href="#icon-flag"/></svg><span>8 TRACKS <i>·</i> 3 LAPS <i>·</i> UP TO 6 FRIENDS</span><span class="tour-sub">One screen or one local network. All together.</span></div>
+        </div>
+        <div class="arena-side-note" aria-hidden="true">EST. IN THE WILD — BUILT FOR THE RACE</div>
+      </div>
+
+      <div id="view-huds" aria-label="Local player race displays"></div>
+      <div id="top-race-bar" class="top-race-bar" hidden><svg aria-hidden="true"><use href="#icon-cup"/></svg><span id="race-stage">GRAND PRIX · RACE 1 / 3</span></div>
+      <div id="global-countdown" class="global-countdown" role="status" aria-live="assertive" hidden></div>
+      <div id="race-alert" class="race-alert" role="status" aria-live="polite"></div>
+      <button id="leave-button" class="leave-button" type="button" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg><span>Leave race</span></button>
+
+      <section id="controller-panel" class="controller-panel" aria-label="Phone controller dashboard" hidden>
+        <div class="controller-topline"><span class="eyebrow">WILD CIRCUIT / REMOTE DRIVE</span><span class="controller-signal"><svg aria-hidden="true"><use href="#icon-network"/></svg>LOCAL LINK</span></div>
+        <div class="controller-identity"><svg class="controller-emblem" aria-hidden="true"><use href="#icon-mark"/></svg><div><p class="eyebrow">YOU'RE AT THE WHEEL</p><h2 id="controller-player">Your driver</h2></div></div>
+        <div class="controller-dashboard">
+          <div class="controller-speedometer"><span class="eyebrow">GROUND SPEED</span><div class="controller-speed-value"><span id="controller-speed">0</span><span class="speed-unit">KM/H</span></div><div class="speedometer-ticks" aria-hidden="true"></div><span class="controller-throttle"><span class="status-dot" aria-hidden="true"></span>AUTO THROTTLE</span></div>
+          <div class="controller-metrics"><div class="controller-stat"><span class="eyebrow">RACE POSITION</span><strong id="controller-position">— / 6</strong></div><div class="controller-stat controller-power"><span class="eyebrow">ITEM SLOT</span><strong id="controller-item">No item</strong><svg aria-hidden="true"><use href="#icon-item"/></svg></div></div>
+        </div>
+        <p class="controller-guidance">Eyes on the host screen. The race is in your hands.</p>
+        <div class="controller-bottom-brand" aria-hidden="true">JUNGLE KART<span>KEEP IT WILD.</span></div>
+      </section>
+
+      <div id="touch-controls" class="touch-controls" aria-label="Touch driving controls" hidden>
+        <div class="steering-control"><span class="touch-control-label">STEER</span><div id="steer-pad" class="steer-pad" role="slider" tabindex="0" aria-label="Steering joystick, slide left or right" aria-orientation="horizontal" aria-valuemin="-1" aria-valuemax="1" aria-valuenow="0"><svg class="steer-arrow steer-left" aria-hidden="true"><use href="#icon-chevron"/></svg><span class="steer-track" aria-hidden="true"></span><span id="steer-knob" class="steer-knob"><svg aria-hidden="true"><use href="#icon-mark"/></svg></span><svg class="steer-arrow steer-right" aria-hidden="true"><use href="#icon-chevron"/></svg></div><span class="touch-auto">Automatic throttle</span></div>
+        <div class="touch-actions"><button id="touch-brake" class="touch-button touch-brake" type="button" aria-label="Hold to brake"><svg aria-hidden="true"><use href="#icon-brake"/></svg><span>BRAKE</span></button><button id="touch-drift" class="touch-button touch-drift" type="button" aria-label="Hold to drift"><svg aria-hidden="true"><use href="#icon-drift"/></svg><span>DRIFT</span></button><button id="touch-item" class="touch-button touch-item" type="button" aria-label="Use power-up"><svg aria-hidden="true"><use href="#icon-item"/></svg><span>ITEM</span></button></div>
+      </div>
+    </section>
+
+    <aside id="sidebar" class="sidebar" aria-label="Garage and race setup">
+      <div class="garage-heading"><div><p class="eyebrow">THE STARTING LINE</p><h2>Your garage<span>.</span></h2></div><span class="garage-stamp"><svg aria-hidden="true"><use href="#icon-flag"/></svg><span>LET'S ROLL</span></span></div>
+
+      <section class="pit-pass" aria-labelledby="pit-pass-title">
+        <h3 id="pit-pass-title" class="sr-only">Your name and device</h3>
+        <div class="name-row"><div class="field"><label for="player-name">Driver name</label><input id="player-name" name="player-name" maxlength="18" placeholder="Your wild alias" autocomplete="nickname" spellcheck="false"></div><button id="join-button" class="button button-dark" type="button">Join crew<svg aria-hidden="true"><use href="#icon-arrow"/></svg></button></div>
+        <div class="field device-field"><label for="device-mode"><svg aria-hidden="true"><use href="#icon-gamepad"/></svg>This device</label><select id="device-mode" name="device-mode"><option value="screen">Drive on this screen</option><option value="controller">Phone controller for host</option></select></div>
+        <p id="controller-note" class="field-note">Playing by phone? Choose controller to drive on the host screen.</p>
+      </section>
+
+      <section class="garage-section" aria-labelledby="animal-heading">
+        <div class="section-heading"><span class="step-number">01</span><div><span class="eyebrow">GARAGE</span><h3 id="animal-heading">Choose your driver</h3></div><span id="selected-animal" class="selection-label">Tavi</span></div>
+        <div id="animal-grid" class="animal-grid" role="group" aria-label="15 animal drivers"></div>
+      </section>
+
+      <section class="garage-section vehicle-section" aria-labelledby="vehicle-heading">
+        <div class="section-heading"><span class="step-number">02</span><div><span class="eyebrow">YOUR RIDE</span><h3 id="vehicle-heading">Pick your wheels</h3></div><span id="selected-vehicle" class="selection-label">Trail Kart</span></div>
+        <div id="vehicle-grid" class="vehicle-grid" role="group" aria-label="6 vehicles with equal performance"></div>
+        <p class="microfairness"><svg aria-hidden="true"><use href="#icon-check"/></svg>All vehicles have the same speed &amp; handling.</p>
+      </section>
+
+      <section class="garage-section crew-section" aria-labelledby="crew-heading">
+        <div class="section-heading"><span class="step-number">03</span><div><span class="eyebrow">BETTER TOGETHER</span><h3 id="crew-heading">Assemble the crew</h3></div><span id="crew-count" class="crew-count" aria-live="polite">0 / 6</span></div>
+        <div id="roster" class="roster" role="list" aria-label="Race crew, up to six players"></div>
+        <div class="join-grid" aria-label="Add a local player on this PC">
+          <button class="button button-outline join-key" type="button" data-control="keyboard1"><strong>P1</strong><span>WASD · Space · E</span></button>
+          <button class="button button-outline join-key" type="button" data-control="keyboard2"><strong>P2</strong><span>Arrows · RShift · Enter</span></button>
+          <button class="button button-outline join-key" type="button" data-control="keyboard3"><strong>P3</strong><span>IJKL · U · O</span></button>
+          <button class="button button-outline join-key" type="button" data-control="keyboard4"><strong>P4</strong><span>TFGH · V · Y</span></button>
+          <button class="button button-outline join-key" type="button" data-control="keyboard5"><strong>P5</strong><span>Numpad 8456 · 0 · .</span></button>
+          <button class="button button-outline join-key" type="button" data-control="keyboard6"><strong>P6</strong><span>Numrow 8456 · 7 · 9</span></button>
+          <button id="add-pad" class="button button-outline join-key join-pad" type="button"><strong>PAD</strong><span>Gamepad · press Start</span></button>
+        </div>
+        <div class="crew-actions"><button id="add-local" class="button button-outline" type="button"><svg aria-hidden="true"><use href="#icon-plus"/></svg>Auto-fill local</button><button id="add-bot" class="button button-outline" type="button"><svg aria-hidden="true"><use href="#icon-bot"/></svg>Add bot</button></div>
+        <p class="field-note crew-note">Same couch, split screen: six keyboard slots plus one gamepad on this PC. Same Wi-Fi, separate devices. Up to six racers total either way.</p>
+        <div class="field mode-field"><label for="mode-select">Race format</label><select id="mode-select" name="mode-select"><option value="cup">3-race Grand Prix</option><option value="single">Single race</option></select></div>
+      </section>
+
+      <section class="launch-section" aria-label="Start your race">
+        <button id="start-button" class="button launch-button" type="button" disabled><svg aria-hidden="true"><use href="#icon-flag"/></svg><span>LET'S GET WILD</span><svg aria-hidden="true"><use href="#icon-arrow"/></svg></button>
+        <p id="host-note" class="host-note">Join the crew to get on the starting grid. The host launches the race.</p>
+        <button id="practice-button" class="practice-button" type="button">Just exploring? Take a practice lap<svg aria-hidden="true"><use href="#icon-arrow"/></svg></button>
+      </section>
+
+      <section class="network-section" aria-labelledby="network-heading">
+        <div class="network-heading"><svg aria-hidden="true"><use href="#icon-network"/></svg><h3 id="network-heading">Bring your own screen.</h3><span class="network-badge">LAN</span></div>
+        <p>Share this address with friends on the same router.</p>
+        <div class="network-address"><output id="network-url" aria-label="Local network join address">Finding your local address…</output><button id="copy-address" class="icon-button" type="button" aria-label="Copy network address" title="Copy address"><svg aria-hidden="true"><use href="#icon-copy"/></svg></button></div>
+        <label for="network-select" class="sr-only">Choose local network address</label><select id="network-select" name="network-select" hidden></select>
+      </section>
+      <footer class="garage-footer"><svg aria-hidden="true"><use href="#icon-leaf"/></svg><p>Real-time 3D graphics. Procedural textures.<br>Original by nature. No downloads, just drive.</p><span class="check-pattern" aria-hidden="true"></span></footer>
+    </aside>
+  </main>
+
+  <dialog id="help-dialog" class="dialog help-dialog" aria-labelledby="help-title">
+    <div class="dialog-header"><div><p class="eyebrow">THE FIELD GUIDE</p><h2 id="help-title">Less reading.<br>More racing.</h2></div><button class="icon-button dialog-close" type="button" data-close aria-label="Close instructions"><svg aria-hidden="true"><use href="#icon-close"/></svg></button></div>
+    <p class="dialog-intro">Pick a driver. Bring your crew. Take the wild route.</p>
+    <div class="rules-strip"><div><strong>3</strong><span>LAPS PER RACE</span></div><div><strong>6</strong><span>RACERS MAX</span></div><div><strong>8</strong><span>TRACKS TO EXPLORE</span></div><div><strong>12</strong><span>WILD POWERS</span></div></div>
+    <section class="help-section"><h3>The circuit</h3><p>Race three laps to the finish. The top six score <strong>10 / 8 / 6 / 4 / 2 / 1 points</strong>. A Grand Prix continues across three tracks chosen from eight hand-built circuits; the highest total takes the cup. All six vehicles have identical speed and handling. Your style is the only difference.</p></section>
+    <section class="help-section" aria-labelledby="controls-heading"><h3 id="controls-heading">Find your controls</h3><p class="dialog-intro">Six friends can share one keyboard — each slot lives in its own corner of the board — plus one gamepad. Tap a slot button in the garage to claim it.</p><div class="control-cards">
+      <article class="control-card"><span class="eyebrow">KEYBOARD / P1</span><h4>Left hand</h4><dl><div><dt>Drive</dt><dd><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></dd></div><div><dt>Drift</dt><dd><kbd>Space</kbd></dd></div><div><dt>Use item</dt><dd><kbd>E</kbd></dd></div></dl></article>
+      <article class="control-card"><span class="eyebrow">KEYBOARD / P2</span><h4>Right hand</h4><dl><div><dt>Drive</dt><dd><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></dd></div><div><dt>Drift</dt><dd><kbd>Right Shift</kbd></dd></div><div><dt>Use item</dt><dd><kbd>Enter</kbd></dd></div></dl></article>
+      <article class="control-card"><span class="eyebrow">KEYBOARD / P3</span><h4>Home keys</h4><dl><div><dt>Drive</dt><dd><kbd>I</kbd><kbd>J</kbd><kbd>K</kbd><kbd>L</kbd></dd></div><div><dt>Drift</dt><dd><kbd>U</kbd></dd></div><div><dt>Use item</dt><dd><kbd>O</kbd></dd></div></dl></article>
+      <article class="control-card"><span class="eyebrow">KEYBOARD / P4</span><h4>Centre left</h4><dl><div><dt>Drive</dt><dd><kbd>T</kbd><kbd>F</kbd><kbd>G</kbd><kbd>H</kbd></dd></div><div><dt>Drift</dt><dd><kbd>V</kbd></dd></div><div><dt>Use item</dt><dd><kbd>Y</kbd></dd></div></dl></article>
+      <article class="control-card"><span class="eyebrow">KEYBOARD / P5</span><h4>Number pad</h4><dl><div><dt>Drive</dt><dd><kbd>8</kbd><kbd>4</kbd><kbd>5</kbd><kbd>6</kbd></dd></div><div><dt>Drift</dt><dd><kbd>Num 0</kbd></dd></div><div><dt>Use item</dt><dd><kbd>Num .</kbd></dd></div></dl></article>
+      <article class="control-card"><span class="eyebrow">KEYBOARD / P6</span><h4>Number row</h4><dl><div><dt>Drive</dt><dd><kbd>8</kbd><kbd>4</kbd><kbd>5</kbd><kbd>6</kbd></dd></div><div><dt>Drift</dt><dd><kbd>7</kbd></dd></div><div><dt>Use item</dt><dd><kbd>9</kbd></dd></div></dl></article>
+      <article class="control-card"><span class="eyebrow">GAMEPAD</span><h4>Plug in. Press Start.</h4><dl><div><dt>Steer</dt><dd>Left stick</dd></div><div><dt>Accelerate / brake</dt><dd>RT / LT</dd></div><div><dt>Drift / item</dt><dd>A / Cross · X / Square</dd></div><div><dt>Join</dt><dd>Start or the PAD button</dd></div></dl></article>
+      <article class="control-card"><span class="eyebrow">TOUCH / PHONE</span><h4>Your pocket cockpit</h4><p>Slide the horizontal joystick to steer. Throttle is automatic. Hold <strong>Brake</strong> to slow, hold <strong>Drift</strong> through a bend, and tap <strong>Item</strong> to use your power-up.</p></article>
+    </div></section>
+    <section class="help-section" aria-labelledby="powers-heading"><h3 id="powers-heading">Twelve ways to shake things up</h3><ul class="power-list"><li><span class="power-dot power-boost" aria-hidden="true"></span><div><strong>Mango Boost</strong><span>A juicy burst of speed for 2.4 seconds.</span></div></li><li><span class="power-dot power-coconut" aria-hidden="true"></span><div><strong>Homing Coconut</strong><span>Chases the nearest racer ahead.</span></div></li><li><span class="power-dot power-shield" aria-hidden="true"></span><div><strong>Vine Shield</strong><span>Absorbs attacks for seven seconds.</span></div></li><li><span class="power-dot power-mud" aria-hidden="true"></span><div><strong>Mud Pod</strong><span>Leaves a slippery surprise behind you.</span></div></li><li><span class="power-dot power-pulse" aria-hidden="true"></span><div><strong>Thunder Drum</strong><span>Stuns nearby rivals. Shields block it.</span></div></li><li><span class="power-dot power-banana" aria-hidden="true"></span><div><strong>Slip Banana</strong><span>Drops a peeling hazard that spins rivals out.</span></div></li><li><span class="power-dot power-rocket" aria-hidden="true"></span><div><strong>Sky Rocket</strong><span>Fast forward missile with a heavy hit.</span></div></li><li><span class="power-dot power-shell" aria-hidden="true"></span><div><strong>Reef Shell</strong><span>Fires straight back at any pursuer.</span></div></li><li><span class="power-dot power-star" aria-hidden="true"></span><div><strong>Sun Star</strong><span>Five seconds of invincible speed. Rammers get stunned.</span></div></li><li><span class="power-dot power-lightning" aria-hidden="true"></span><div><strong>Storm Call</strong><span>Slows every rival ahead of you.</span></div></li><li><span class="power-dot power-magnet" aria-hidden="true"></span><div><strong>Vine Magnet</strong><span>Steals the held item from the racer ahead.</span></div></li><li><span class="power-dot power-swap" aria-hidden="true"></span><div><strong>Spirit Swap</strong><span>Teleport-swap positions with a random rival.</span></div></li></ul></section>
+    <section class="help-network"><svg aria-hidden="true"><use href="#icon-network"/></svg><div><h3>One router. One wild crew.</h3><p>Friends join using the network address in the garage. Use the same router and allow this host through your private-network firewall. Choose “Phone controller for host” to control a racer on the host's screen instead of rendering a separate view.</p><p>For gamepad controllers, localhost is recommended: browsers may require a secure context (localhost or HTTPS) for controller access.</p></div></section>
+    <div class="dialog-footer"><span>Same stats. Pure skill.</span><button class="button button-dark" type="button" data-close>Got it. Let's drive<svg aria-hidden="true"><use href="#icon-arrow"/></svg></button></div>
+  </dialog>
+
+  <dialog id="results-dialog" class="dialog results-dialog" aria-labelledby="results-title" aria-describedby="results-subtitle">
+    <div class="results-banner"><svg aria-hidden="true"><use href="#icon-cup"/></svg><span class="check-pattern" aria-hidden="true"></span></div>
+    <div class="dialog-header"><div><p id="results-eyebrow" class="eyebrow">THE FINISH LINE</p><h2 id="results-title">Wildly well driven.</h2></div></div>
+    <p id="results-subtitle" class="dialog-intro">One for the record books. Here's how the crew finished.</p>
+    <canvas id="results-podium" class="podium-canvas" aria-label="Animated 3D winners' podium. Full finishing order and points are listed below."></canvas>
+    <div class="results-columns"><section class="results-card" aria-labelledby="race-results-heading"><div class="results-card-heading"><span class="eyebrow">THIS RACE</span><h3 id="race-results-heading">Across the line</h3><span class="score-column-label">FINISH</span></div><div id="race-results" class="score-list" aria-label="Race finishing order"></div></section><section class="results-card cup-card" aria-labelledby="cup-results-heading"><div class="results-card-heading"><span class="eyebrow">THE BIG PICTURE</span><h3 id="cup-results-heading">Cup standings</h3><span class="score-column-label">POINTS</span></div><div id="cup-results" class="score-list" aria-label="Grand Prix point standings"></div></section></div>
+    <div class="results-actions"><button id="results-back" class="button button-outline" type="button">Back to garage</button><button id="next-button" class="button button-orange" type="button">Next race<svg aria-hidden="true"><use href="#icon-arrow"/></svg></button></div>
+  </dialog>
+
+  <dialog id="leaderboard-dialog" class="dialog leaderboard-dialog" aria-labelledby="leaderboard-title" aria-describedby="leaderboard-description">
+    <div class="dialog-header"><div><p class="eyebrow">LOCAL LEGENDS</p><h2 id="leaderboard-title">The wild ones.</h2></div><button class="icon-button dialog-close" type="button" data-close aria-label="Close leaderboard"><svg aria-hidden="true"><use href="#icon-close"/></svg></button></div>
+    <p id="leaderboard-description" class="dialog-intro">Bragging rights start here. This leaderboard is local to this host, not a global internet ranking. Ranked by points per race, then average finish time.</p>
+    <canvas id="leaderboard-podium" class="podium-canvas" aria-label="3D podium of the host's top three records. Names and scores are listed below."></canvas>
+    <div class="leaderboard-table-heading"><span>RANK / DRIVER</span><span>SCORE</span></div><div id="leaderboard-list" class="score-list leaderboard-list" aria-label="Host leaderboard"></div>
+    <div class="dialog-footer"><span><svg aria-hidden="true"><use href="#icon-network"/></svg>THIS HOST ONLY</span><button class="button button-dark" type="button" data-close>Back to the wild<svg aria-hidden="true"><use href="#icon-arrow"/></svg></button></div>
+  </dialog>
+
+  <div id="notice" class="notice" role="status" aria-live="polite" aria-atomic="true"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
